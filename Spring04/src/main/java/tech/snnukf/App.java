@@ -1,5 +1,9 @@
 package tech.snnukf;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import tech.snnukf.service.UserService;
+
 /**
  * Hello world!
  *
@@ -8,6 +12,8 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        ApplicationContext ac = new ClassPathXmlApplicationContext("spring.xml");
+        UserService userService = (UserService) ac.getBean("userService");
+        userService.test();
     }
 }
