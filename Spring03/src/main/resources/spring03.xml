@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--spring2.5之后，为了简化setter方法属性注入，引入p名称空间，可以将<property>子元素简化为<bean>元素属性配置。-->
+        <bean id="userDao" class="tech.snnukf.dao.UserDao"></bean>
+        <bean id="userService03" class="tech.snnukf.service.UserService03"
+            p:name="127.0.0.1"
+            p:userDao-ref="userDao"
+        ></bean>
+</beans>

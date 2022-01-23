@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--id bean标签的唯一标识 一般是对应JavaBean首字母小写 class bean对象所在路径-->
+    <bean id="typeDao" class="tech.snnukf.dao.TypeDao">
+        <!-- collaborators and configuration for this bean go here -->
+    </bean>
+
+    <!--
+        静态工厂实例化
+        1. 定义工厂类及对应的静态方法
+        2. 配置bean对象对应的工厂类及静态方法
+        id: 需要被实例化的bean对象的id
+        class: 静态工厂的路径
+        factory-method: 静态工厂中实例化bean对象的静态方法
+    -->
+    <bean id="typeService" class="tech.snnukf.factory.StaticFactory" factory-method="createTypeService"></bean>
+
+    <!--
+    实例化工厂
+        1.定义实例化工厂bean
+        2.引用工厂bean 指定工厂创建方法（非静态）
+        factory-bean 工厂对象对应的id
+        factory-method 工厂类的方法
+    -->
+    <bean id="instanceFactory" class="tech.snnukf.factory.InstanceFactory"></bean>
+    <bean id="typeController" factory-bean="instanceFactory" factory-method="createTypeController"></bean>
+    <!-- more bean definitions go here -->
+
+</beans>

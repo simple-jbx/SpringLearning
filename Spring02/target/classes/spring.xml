@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans>
-    <bean id="userDao" class="tech.snnukf.dao.UserDao"></bean>
-    <bean id="userService" class="tech.snnukf.service.UserService"></bean>
-</beans>

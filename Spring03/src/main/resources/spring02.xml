@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="userDao" class="tech.snnukf.dao.UserDao"></bean>
+    <bean id="studentDao" class="tech.snnukf.dao.StudentDao"></bean>
+
+    <!--
+        构造器注入
+        设置构造器所需要的参数
+        通过constructor-arg标签设置构造器的参数
+        name:属性名称
+        ref:要注入的bean对象对应的bean标签的id属性值
+        value:数据具体的值
+        index:参数的位置（从0开始）
+    -->
+    <bean id="userService02" class="tech.snnukf.service.UserService02">
+        <constructor-arg name="userDao" ref="userDao"></constructor-arg>
+        <constructor-arg name="name" value="127.0.0.1" index="2"></constructor-arg>
+        <constructor-arg name="studentDao" ref="studentDao" index="1"></constructor-arg>
+    </bean>
+
+<!--    循环依赖问题 需要通过set注入解决&ndash;&gt;-->
+<!--    <bean id="accountDao" class="tech.snnukf.dao.AccountDao">-->
+<!--        <constructor-arg name="accountService" ref="accountService"></constructor-arg>-->
+<!--    </bean>-->
+
+<!--    <bean id="accountService" class="tech.snnukf.service.AccountService">-->
+<!--        <constructor-arg name="accountDao" ref="accountDao"></constructor-arg>-->
+<!--    </bean>-->
+
+    <bean id="accountService" class="tech.snnukf.service.AccountService">
+        <property name="accountDao" ref="accountDao"></property>
+    </bean>
+
+    <bean id="accountDao" class="tech.snnukf.dao.AccountDao">
+        <property name="accountService" ref="accountService"></property>
+    </bean>
+
+    <bean id="typeService" class="tech.snnukf.service.TypeService">
+        <property name="typeDao" ref="typeDao"></property>
+    </bean>
+
+    <!--静态工厂注入
+        通过静态工厂实例化需要被注入的bean对象
+    -->
+<!--    <bean id="typeDao" class="tech.snnukf.factory.StaticFactory" factory-method="createTypeDao"></bean>-->
+
+    <!-- 实例化工厂注入
+            通过实例化工厂实例化需要被注入的bean对象
+    -->
+    <bean id="instanceFactory" class="tech.snnukf.factory.InstanceFactory"></bean>
+    <bean id="typeDao" factory-bean="instanceFactory" factory-method="createTypeDao"></bean>
+</beans>
