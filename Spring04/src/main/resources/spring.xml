@@ -11,9 +11,13 @@
     <context:annotation-config/>
     <bean id="userDao" class="tech.snnukf.dao.UserDao"></bean>
     <bean id="userService" class="tech.snnukf.service.UserService"></bean>
+    <bean id="accountDao" class="tech.snnukf.dao.AccountDao"></bean>
+    <bean id="accountService" class="tech.snnukf.service.AccountService"></bean>
+
 
     <!--接口的实现类-->
     <bean id="userDaoImpl01" class="tech.snnukf.dao.Impl.UserDaoImpl01"></bean>
     <bean id="userDaoImpl02" class="tech.snnukf.dao.Impl.UserDaoImpl02"></bean>
+
 
 </beans>
