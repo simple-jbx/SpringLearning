@@ -3,6 +3,7 @@ package tech.snnukf;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import tech.snnukf.task.TaskJob;
+import tech.snnukf.task.TaskJob2;
 
 /**
  * Hello world!
@@ -18,5 +19,6 @@ public class Test
         ApplicationContext ac = new ClassPathXmlApplicationContext("spring.xml");
         //获取指定bean对象
         TaskJob taskJob = (TaskJob) ac.getBean("taskJob");
+        TaskJob2 taskJob2 = (TaskJob2) ac.getBean("taskJob2");
     }
 }

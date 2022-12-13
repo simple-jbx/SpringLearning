@@ -26,4 +26,7 @@
         <task:scheduled ref="taskJob" method="job2" cron="0/5 * * * * ?" />
         <!--多个定时任务 在这里配置-->
     </task:scheduled-tasks>
+
+    <!--配置定时任务驱动。开启这个配置，spring才能识别@Scheduled注解-->
+    <task:annotation-driven />
 </beans>
