@@ -1,4 +1,4 @@
-package main.java.tech.snnukf;
+package tech.snnukf;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
