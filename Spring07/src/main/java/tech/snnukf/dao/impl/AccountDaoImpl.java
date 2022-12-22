@@ -141,7 +141,20 @@ public class AccountDaoImpl implements IAccountDao {
      */
     @Override
     public Account queryAccountById(int accountId) {
-        return null;
+        String sql = "select * from t_account where id = ?";
+        Account account = jdbcTemplate.queryForObject(sql, new Object[]{accountId},
+                (resultSet, i) -> {
+                    Account acc = new Account();
+                    acc.setId(resultSet.getInt("id"));
+                    acc.setMoney(resultSet.getDouble("money"));
+                    acc.setName(resultSet.getString("name"));
+                    acc.setRemark(resultSet.getString("remark"));
+                    acc.setType(resultSet.getString("type"));
+                    acc.setCreateTime(resultSet.getDate("create_time"));
+                    acc.setUpdateTime(resultSet.getDate("update_time"));
+                    return acc;
+                });
+        return account;
     }
 
     /**

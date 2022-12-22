@@ -15,7 +15,7 @@ import java.util.List;
  * @author: simple.jbx
  * @date: 2022/12/20
  **/
-public class SpringJdbcAddTest extends BaseTest{
+public class SpringJdbcCrudTest extends BaseTest{
 
     @Autowired
     private IAccountDao accountDao;
@@ -92,6 +92,12 @@ public class SpringJdbcAddTest extends BaseTest{
     public void queryAccountCount() {
         int count = accountDao.queryAccountCount(1);
         System.out.println(count);
+    }
+
+    @Test
+    public void queryAccount() {
+        Account account = accountDao.queryAccountById(1);
+        System.out.println(account);
     }
 
 

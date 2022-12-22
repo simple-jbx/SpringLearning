@@ -2,6 +2,7 @@ package tech.snnukf.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @SuperBuilder
+@NoArgsConstructor
 public class Account {
 
     private Integer id;
@@ -33,4 +35,5 @@ public class Account {
     private Date updateTime;
 
     private Integer userId;
+
 }
