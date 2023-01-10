@@ -1,17 +1,21 @@
 package tech.snnukf.dao.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import tech.snnukf.dao.IAccountDao;
 import tech.snnukf.entity.Account;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,7 +89,7 @@ public class AccountDaoImpl implements IAccountDao {
     /**
      * description: 批量添加账户记录返回受影响的行数
      *
-     * @param accountList
+     * @param accounts
      * @param: accountList
      * @return: int
      * @author: simple.jbx
@@ -175,7 +179,39 @@ public class AccountDaoImpl implements IAccountDao {
      */
     @Override
     public List<Account> queryAccountByParams(Integer userId, String accountName, String accountType, String createTime) {
-        return null;
+        String sql = "select * from t_account where user_id = ?";
+        List<Object> params = new ArrayList<>();
+        params.add(userId);
+        //判断是否有条件查询
+        //如果账户名称不为空，通过账户名称模糊匹配
+        if(StringUtils.isNotBlank(accountName)) {
+            sql += " and name like concat('%', ?, '%')";
+            params.add(accountName);
+        }
+        //如果账户类型不为空，通过制定类型名称查询
+        if(StringUtils.isNotBlank(accountType)) {
+            sql += " and type = ?";
+            params.add(accountType);
+        }
+        //创建时间不为空
+        if(StringUtils.isNotBlank(createTime)) {
+            //拼接sql
+            sql += " and create_time < ?";
+            params.add(createTime);
+        }
+        Object[] objects = params.toArray(new Object[0]);
+        List<Account> accounts = jdbcTemplate.query(sql, objects, (ResultSet resultSet, int i) -> {
+            Account acc = new Account();
+            acc.setId(resultSet.getInt("id"));
+            acc.setMoney(resultSet.getDouble("money"));
+            acc.setName(resultSet.getString("name"));
+            acc.setRemark(resultSet.getString("remark"));
+            acc.setType(resultSet.getString("type"));
+            acc.setCreateTime(resultSet.getDate("create_time"));
+            acc.setUpdateTime(resultSet.getDate("update_time"));
+            return acc;
+        });
+        return accounts;
     }
 
     /**
@@ -190,7 +226,14 @@ public class AccountDaoImpl implements IAccountDao {
      */
     @Override
     public int updateAccount(Account account) {
-        return 0;
+        String sql = "update t_account set name = ?, type = ?, money = ?, " +
+                "remark = ?, user_id = ?, update_time = now() where id = ?";
+
+        Object[] objs = {account.getName(), account.getType(), account.getMoney(),
+                account.getRemark(), account.getUserId(), account.getId()
+        };
+        int rows = jdbcTemplate.update(sql, objs);
+        return rows;
     }
 
     /**
@@ -205,7 +248,25 @@ public class AccountDaoImpl implements IAccountDao {
      */
     @Override
     public int updateAccountBatch(List<Account> accountList) {
-        return 0;
+        String sql = "update t_account set name = ?, type = ?, money = ?, " +
+                "remark = ?, user_id = ?, update_time = now() where id = ?";
+        int rows = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1, accountList.get(i).getName());
+                ps.setString(2, accountList.get(i).getType());
+                ps.setDouble(3, accountList.get(i).getMoney());
+                ps.setString(4, accountList.get(i).getRemark());
+                ps.setInt(5, accountList.get(i).getUserId());
+                ps.setInt(6, accountList.get(i).getId());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return accountList.size();
+            }
+        }).length;
+        return rows;
     }
 
     /**
@@ -220,7 +281,9 @@ public class AccountDaoImpl implements IAccountDao {
      */
     @Override
     public int deleteAccount(int accountId) {
-        return 0;
+        String sql = "delete from t_account where id = ?";
+        Object[] objects = {accountId};
+        return jdbcTemplate.update(sql, objects);
     }
 
     /**
@@ -235,6 +298,18 @@ public class AccountDaoImpl implements IAccountDao {
      */
     @Override
     public int deleteAccountBatch(List<Integer> accountIds) {
-        return 0;
+        String sql = "delete from t_account where id = ?";
+        int rows = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setInt(1, accountIds.get(i));
+            }
+
+            @Override
+            public int getBatchSize() {
+                return accountIds.size();
+            }
+        }).length;
+        return rows;
     }
 }

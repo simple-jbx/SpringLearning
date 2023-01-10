@@ -100,5 +100,82 @@ public class SpringJdbcCrudTest extends BaseTest{
         System.out.println(account);
     }
 
+    @Test
+    public void testDeleteAccount() {
+        int row = accountDao.deleteAccount(1);
+        System.out.println("delete " + row + " rows");
+    }
 
+    @Test
+    public void queryAccountByParams() {
+        List<Account> accounts = accountDao.queryAccountByParams(1, "acc2", null, null);
+        System.out.println("accounts size " + accounts.size());
+        accounts.forEach(System.out::println);
+    }
+
+    @Test
+    public void updateAccountBatch() {
+        Account account1 = Account
+                .builder()
+                .id(6)
+                .name("acc5")
+                .type("农业银行")
+                .money(700.56)
+                .remark("奖金")
+                .userId(3)
+                .build();
+        Account account2 = Account
+                .builder()
+                .id(7)
+                .name("acc6")
+                .type("建设银行")
+                .money(200.00)
+                .remark("花费补贴")
+                .userId(3)
+                .build();
+        Account account3 = Account
+                .builder()
+                .id(8)
+                .name("acc7")
+                .type("工商银行")
+                .money(600.00)
+                .remark("交通补贴")
+                .userId(3)
+                .build();
+
+        List<Account> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+        accounts.add(account3);
+
+        int rows = accountDao.updateAccountBatch(accounts);
+        System.out.println("updateBatch, affect " + rows + " rows");
+
+    }
+
+    @Test
+    public void deleteAccountBatch() {
+        List<Integer> accountIds = new ArrayList<>();
+        accountIds.add(1);
+        accountIds.add(7);
+        int rows = accountDao.deleteAccountBatch(accountIds);
+        System.out.println("delete " + rows +  " rows");
+    }
+
+    @Test
+    public void updateAccount() {
+        Account account3 = Account
+                .builder()
+                .id(8)
+                .name("acc7")
+                .type("工商银行")
+                .money(700.00)
+                .remark("交通补贴")
+                .userId(3)
+                .build();
+
+        int rows = accountDao.updateAccount(account3);
+        System.out.println("update " + rows +  " rows");
+
+    }
 }
